@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>引动智算 - 终端下载中心</title>
+<style>
+    :root {
+        --bg-color: #000000;
+        --card-bg: #0a0a0c;
+        --text-main: #ffffff;
+        --text-sub: #94a3b8;
+        --accent-blue: #38bdf8;
+        --accent-blue-dark: #2563eb;
+        --border-color: rgba(56, 189, 248, 0.15);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+        line-height: 1.6;
+        background-image: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 60%);
+        min-height: 100vh;
+    }
+
+    /* 顶部导航 */
+    .header {
+        padding: 20px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        background: rgba(0,0,0,0.8);
+        backdrop-filter: blur(10px);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+    .logo {
+        font-size: 20px;
+        font-weight: 900;
+        letter-spacing: 2px;
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .logo svg { width: 24px; height: 24px; }
+
+    /* 主视觉区 */
+    .hero {
+        text-align: center;
+        padding: 60px 20px 40px;
+    }
+    .hero h1 {
+        font-size: 42px;
+        font-weight: 900;
+        letter-spacing: 4px;
+        margin-bottom: 15px;
+        background: linear-gradient(to right, #ffffff, #38bdf8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+        color: var(--text-sub);
+        font-size: 16px;
+        letter-spacing: 2px;
+    }
+
+    /* 软件列表容器 */
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 25px;
+    }
+
+    /* 软件卡片 */
+    .app-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    .app-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    .app-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(37, 99, 235, 0.15);
+        border-color: rgba(56, 189, 248, 0.4);
+    }
+    .app-card:hover::before { opacity: 1; }
+
+    .app-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+    .app-icon {
+        width: 55px;
+        height: 55px;
+        border-radius: 12px;
+        background: #000;
+        border: 1px solid rgba(56, 189, 248, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: 900;
+        color: var(--accent-blue);
+    }
+    .app-name {
+        font-size: 18px;
+        font-weight: 800;
+        color: #fff;
+    }
+    .app-desc {
+        color: var(--text-sub);
+        font-size: 13px;
+        margin-bottom: 20px;
+        flex-grow: 1;
+    }
+    
+    /* 标签 */
+    .tags { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .tag {
+        font-size: 11px;
+        padding: 3px 8px;
+        border-radius: 4px;
+        background: rgba(56, 189, 248, 0.1);
+        color: var(--accent-blue);
+        border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    /* 按钮 */
+    .btn-download {
+        display: block;
+        width: 100%;
+        text-align: center;
+        background: linear-gradient(135deg, var(--accent-blue), var(--accent-blue-dark));
+        color: #fff;
+        text-decoration: none;
+        padding: 12px 0;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        transition: all 0.3s;
+    }
+    .btn-download:hover {
+        box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        opacity: 0.9;
+    }
+    
+    /* 禁用状态按钮 */
+    .btn-disabled {
+        background: #222;
+        color: #666;
+        cursor: not-allowed;
+    }
+    .btn-disabled:hover { box-shadow: none; opacity: 1; }
+
+    /* 底部 */
+    .footer {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--text-sub);
+        font-size: 12px;
+        border-top: 1px solid rgba(255,255,255,0.05);
+        margin-top: 40px;
+    }
+
+    @media (max-width: 600px) {
+        .header { padding: 15px 20px; }
+        .hero h1 { font-size: 32px; }
+        .hero p { font-size: 14px; }
+        .container { padding: 15px; grid-template-columns: 1fr; }
+    }
+</style>
+</head>
+<body>
+
+    <!-- 顶部导航 -->
+    <header class="header">
+        <div class="logo">
+            <!-- 科技图标 -->
+            <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="512" cy="512" r="400" fill="none" stroke="#38bdf8" stroke-width="30" stroke-dasharray="40 80" opacity="0.5"/>
+                <circle cx="512" cy="512" r="200" fill="none" stroke="#38bdf8" stroke-width="40" opacity="0.8"/>
+                <circle cx="512" cy="512" r="60" fill="#38bdf8" />
+            </svg>
+            引动智算
+        </div>
+    </header>
+
+    <!-- 主视觉 -->
+    <section class="hero">
+        <h1>终端矩阵 · 下载中心</h1>
+        <p>用数据驱动决策，用算力重构概率</p>
+    </section>
+
+    <!-- 软件导航列表 -->
+    <div class="container">
+        
+        <!-- 软件卡片 1 -->
+        <div class="app-card">
+            <div class="app-header">
+                <div class="app-icon">智</div>
+                <div class="app-name">引动智算 · 新澳智选库</div>
+            </div>
+            <div class="app-desc">全新一代量化分析终端。涵盖十大算法交叉推演、极寒排雷防守、动态冷却池。提供实时大底与深度复盘数据。</div>
+            <div class="tags">
+                <span class="tag">AI推演</span>
+                <span class="tag">极寒风控</span>
+                <span class="tag">V13.8</span>
+            </div>
+            <!-- 替换 href 里的链接为你软件的下载地址或TG机器人链接 -->
+            <a href="https://你的实际链接.com" target="_blank" class="btn-download">📥 免费下载 / 立即体验</a>
+        </div>
+
+        <!-- 软件卡片 2 -->
+        <div class="app-card">
+            <div class="app-header">
+                <div class="app-icon">狙</div>
+                <div class="app-name">引动智算 · 极寒狙击</div>
+            </div>
+            <div class="app-desc">专为精准排雷打造的防守端工具。深度追踪冷热遗漏指标，精准执行杀肖、杀尾、杀半波，剔除高危雷区。</div>
+            <div class="tags">
+                <span class="tag">精准杀号</span>
+                <span class="tag">排雷雷达</span>
+                <span class="tag">即将上线</span>
+            </div>
+            <!-- 禁用状态按钮示例 -->
+            <a href="javascript:void(0);" class="btn-download btn-disabled">⏳ 即将开放下载</a>
+        </div>
+
+        <!-- 软件卡片 3 -->
+        <div class="app-card">
+            <div class="app-header">
+                <div class="app-icon">沙</div>
+                <div class="app-name">引动智算 · 资金沙盘</div>
+            </div>
+            <div class="app-desc">资金管理与推演模拟系统。结合历史胜率与风控数据，为你提供科学的资金统筹与实盘压力测试。</div>
+            <div class="tags">
+                <span class="tag">资金规划</span>
+                <span class="tag">实战推演</span>
+                <span class="tag">开发中</span>
+            </div>
+            <a href="javascript:void(0);" class="btn-download btn-disabled">⏳ 正在开发中</a>
+        </div>
+
+    </div>
+
+    <!-- 底部声明 -->
+    <footer class="footer">
+        <p>© 2024 引动智算 QUANT INTELLIGENCE. 保留所有权利。</p>
+        <p style="margin-top: 10px; opacity: 0.5;">免责声明：本平台提供的所有数据及算法推演结果仅供参考，不构成任何实质性建议。</p>
+    </footer>
+
+</body>
+</html>
