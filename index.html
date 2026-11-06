@@ -2,197 +2,318 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>引动智算 - 终端下载中心</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>黑曜士 ONYX 下载中心</title>
 <style>
     :root {
-        --bg-color: #000000;
-        --card-bg: #0a0a0c;
-        --text-main: #ffffff;
-        --text-sub: #94a3b8;
-        --accent-blue: #38bdf8;
-        --accent-blue-dark: #2563eb;
-        --border-color: rgba(56, 189, 248, 0.15);
+        --bg: #030305;          /* 极深黑曜底色 */
+        --surface: #0a0a0f;     /* 卡片底色 */
+        --border: #1f1f27;      /* 暗灰边框 */
+        --text: #f8fafc;        /* 纯白文字 */
+        --dim: #64748b;         /* 暗灰文字 */
+        --onyx-blue: #38bdf8;   /* 极客蓝 */
+        --onyx-purple: #818cf8; /* 赛博紫 */
+        --glow: rgba(56, 189, 248, 0.3);
+        --android-green: #10b981;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-        background-color: var(--bg-color);
-        color: var(--text-main);
-        font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         line-height: 1.6;
-        background-image: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 60%);
         min-height: 100vh;
+        background-image: 
+            radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 60%),
+            linear-gradient(0deg, rgba(3,3,5,1) 0%, rgba(10,10,15,0.5) 100%);
+        background-attachment: fixed; 
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
     }
 
     /* 顶部导航 */
     .header {
-        padding: 20px 40px;
+        padding: calc(15px + env(safe-area-inset-top)) 20px 15px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         border-bottom: 1px solid rgba(255,255,255,0.05);
-        background: rgba(0,0,0,0.8);
-        backdrop-filter: blur(10px);
+        background: rgba(3, 3, 5, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
         position: sticky;
         top: 0;
         z-index: 100;
     }
+    
     .logo {
         font-size: 20px;
         font-weight: 900;
-        letter-spacing: 2px;
-        color: var(--text-main);
+        letter-spacing: 4px;
         display: flex;
         align-items: center;
         gap: 10px;
     }
-    .logo svg { width: 24px; height: 24px; }
+    
+    .logo svg {
+        width: 28px; 
+        height: 28px;
+        filter: drop-shadow(0 0 8px var(--glow));
+    }
+    
+    .logo .en { 
+        font-size: 12px; 
+        color: var(--onyx-blue); 
+        letter-spacing: 2px; 
+        font-weight: 700; 
+        margin-left: 5px;
+    }
 
     /* 主视觉区 */
     .hero {
         text-align: center;
-        padding: 60px 20px 40px;
+        padding: 50px 20px 40px;
+        position: relative;
     }
-    .hero h1 {
-        font-size: 42px;
-        font-weight: 900;
-        letter-spacing: 4px;
-        margin-bottom: 15px;
-        background: linear-gradient(to right, #ffffff, #38bdf8);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-    .hero p {
-        color: var(--text-sub);
-        font-size: 16px;
-        letter-spacing: 2px;
+    
+    .hero::before {
+        content: ''; position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
+        width: 500px; height: 500px; border: 1px dashed rgba(56, 189, 248, 0.08);
+        border-radius: 50%; z-index: -1; pointer-events: none;
     }
 
-    /* 软件列表容器 */
+    .hero h1 {
+        font-size: 40px;
+        font-weight: 900;
+        letter-spacing: 6px;
+        margin-bottom: 15px;
+        background: linear-gradient(to right, #ffffff, var(--onyx-blue));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 40px var(--glow);
+        line-height: 1.3;
+    }
+    
+    .hero p {
+        color: var(--dim);
+        font-size: 13px;
+        letter-spacing: 3px;
+        font-family: 'Courier New', Courier, monospace;
+    }
+    
+    .hero .line {
+        width: 60px; height: 2px; background: linear-gradient(90deg, transparent, var(--onyx-blue), transparent);
+        margin: 25px auto 0;
+    }
+
+    /* 软件矩阵列表 */
     .container {
+        width: 100%;
         max-width: 1100px;
         margin: 0 auto;
-        padding: 20px;
+        padding: 0 20px 40px;
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-        gap: 25px;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 24px;
+        flex: 1;
     }
 
     /* 软件卡片 */
     .app-card {
-        background: var(--card-bg);
-        border: 1px solid var(--border-color);
-        border-radius: 16px;
-        padding: 25px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 24px;
         display: flex;
         flex-direction: column;
-        transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
     }
+    
     .app-card::before {
         content: '';
         position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
-        opacity: 0;
-        transition: opacity 0.3s ease;
+        top: 0; left: -100%;
+        width: 50%; height: 2px;
+        background: linear-gradient(90deg, transparent, var(--onyx-blue), transparent);
+        transition: left 0.6s ease;
     }
+
     .app-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(37, 99, 235, 0.15);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.6), inset 0 0 30px rgba(56, 189, 248, 0.05);
         border-color: rgba(56, 189, 248, 0.4);
     }
-    .app-card:hover::before { opacity: 1; }
+    .app-card:hover::before { left: 100%; }
 
     .app-header {
         display: flex;
         align-items: center;
         gap: 15px;
-        margin-bottom: 15px;
+        margin-bottom: 20px;
     }
+    
+    /* 科技图标底座 */
     .app-icon {
         width: 55px;
         height: 55px;
-        border-radius: 12px;
+        flex-shrink: 0;
         background: #000;
         border: 1px solid rgba(56, 189, 248, 0.3);
+        border-radius: 14px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 20px;
-        font-weight: 900;
-        color: var(--accent-blue);
+        box-shadow: inset 0 0 15px rgba(56, 189, 248, 0.1), 0 0 15px rgba(56, 189, 248, 0.1);
+        position: relative;
     }
+    
+    .app-icon::after {
+        content: ''; position: absolute; inset: 4px; border: 1px dashed rgba(56, 189, 248, 0.2); border-radius: 10px;
+    }
+
     .app-name {
         font-size: 18px;
         font-weight: 800;
         color: #fff;
+        letter-spacing: 1px;
+        margin-bottom: 2px;
     }
+    .app-sub {
+        font-size: 11px;
+        color: var(--onyx-purple);
+        font-family: monospace;
+        letter-spacing: 1px;
+    }
+
     .app-desc {
-        color: var(--text-sub);
+        color: var(--dim);
         font-size: 13px;
         margin-bottom: 20px;
         flex-grow: 1;
+        line-height: 1.7;
     }
-    
-    /* 标签 */
+
     .tags { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
     .tag {
         font-size: 11px;
-        padding: 3px 8px;
+        padding: 3px 10px;
         border-radius: 4px;
-        background: rgba(56, 189, 248, 0.1);
-        color: var(--accent-blue);
-        border: 1px solid rgba(56, 189, 248, 0.2);
+        background: rgba(56, 189, 248, 0.05);
+        color: var(--onyx-blue);
+        border: 1px solid rgba(56, 189, 248, 0.15);
+        font-family: monospace;
     }
 
-    /* 按钮 */
-    .btn-download {
-        display: block;
-        width: 100%;
-        text-align: center;
-        background: linear-gradient(135deg, var(--accent-blue), var(--accent-blue-dark));
-        color: #fff;
-        text-decoration: none;
-        padding: 12px 0;
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: 700;
-        letter-spacing: 1px;
-        transition: all 0.3s;
+    /* ================= 双端下载按钮组 ================= */
+    .download-group {
+        display: flex;
+        gap: 10px;
+        margin-top: auto;
     }
-    .btn-download:hover {
-        box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
-        opacity: 0.9;
+
+    .btn-dl {
+        flex: 1;
+        text-align: center;
+        text-decoration: none;
+        padding: 10px 0;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 700;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.3s;
+        border: 1px solid transparent;
+    }
+
+    /* 安卓按钮：暗黑科技绿 */
+    .android-btn {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--android-green);
+        border-color: rgba(16, 185, 129, 0.3);
+    }
+    .android-btn:hover {
+        background: var(--android-green);
+        color: #000;
+        box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+    }
+
+    /* 电脑按钮：黑曜士标准蓝 */
+    .pc-btn {
+        background: rgba(56, 189, 248, 0.1);
+        color: var(--onyx-blue);
+        border-color: rgba(56, 189, 248, 0.3);
+    }
+    .pc-btn:hover {
+        background: var(--onyx-blue);
+        color: #000;
+        box-shadow: 0 0 15px var(--glow);
     }
     
-    /* 禁用状态按钮 */
+    /* 禁用状态 */
     .btn-disabled {
-        background: #222;
-        color: #666;
+        color: var(--dim);
+        border-color: var(--border);
+        background: transparent;
         cursor: not-allowed;
     }
-    .btn-disabled:hover { box-shadow: none; opacity: 1; }
+    .btn-disabled:hover {
+        background: transparent;
+        color: var(--dim);
+        box-shadow: none;
+        border-color: var(--border);
+    }
+
+    /* 设备智能识别脉冲动画 */
+    @keyframes pulseGlowGreen {
+        0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+        70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+    @keyframes pulseGlowBlue {
+        0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.4); }
+        70% { box-shadow: 0 0 0 8px rgba(56, 189, 248, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
+    }
+
+    .pulse-android {
+        animation: pulseGlowGreen 2s infinite;
+    }
+    .pulse-pc {
+        animation: pulseGlowBlue 2s infinite;
+    }
 
     /* 底部 */
     .footer {
         text-align: center;
-        padding: 40px 20px;
-        color: var(--text-sub);
-        font-size: 12px;
-        border-top: 1px solid rgba(255,255,255,0.05);
-        margin-top: 40px;
+        padding: 30px 20px calc(30px + env(safe-area-inset-bottom));
+        color: #334155;
+        font-size: 11px;
+        border-top: 1px solid var(--border);
+        margin-top: auto;
+        font-family: monospace;
     }
+    .footer p { margin-bottom: 5px; }
 
+    /* 手机端适配 */
     @media (max-width: 600px) {
-        .header { padding: 15px 20px; }
-        .hero h1 { font-size: 32px; }
-        .hero p { font-size: 14px; }
-        .container { padding: 15px; grid-template-columns: 1fr; }
+        .hero h1 { font-size: 30px; letter-spacing: 4px; }
+        .hero p { font-size: 11px; }
+        .container { 
+            grid-template-columns: 1fr;
+            gap: 16px;
+            padding: 0 15px 30px;
+        }
+        .app-card {
+            padding: 20px;
+            clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+        }
     }
 </style>
 </head>
@@ -201,78 +322,172 @@
     <!-- 顶部导航 -->
     <header class="header">
         <div class="logo">
-            <!-- 科技图标 -->
-            <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="512" cy="512" r="400" fill="none" stroke="#38bdf8" stroke-width="30" stroke-dasharray="40 80" opacity="0.5"/>
-                <circle cx="512" cy="512" r="200" fill="none" stroke="#38bdf8" stroke-width="40" opacity="0.8"/>
-                <circle cx="512" cy="512" r="60" fill="#38bdf8" />
+            <!-- 黑曜石盾牌 SVG Logo -->
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- 外轮廓：盾牌 -->
+                <path d="M12 2L2 6V12C2 17.5 6 21.5 12 23C18 21.5 22 17.5 22 12V6L12 2Z" stroke="#38bdf8" stroke-width="1.5" stroke-linejoin="round"/>
+                <!-- 内部切割线：黑曜石折射感 -->
+                <path d="M12 2V23" stroke="#38bdf8" stroke-width="1" stroke-linejoin="round" opacity="0.6"/>
+                <path d="M2 6L22 12" stroke="#38bdf8" stroke-width="0.8" stroke-linejoin="round" opacity="0.4"/>
+                <path d="M2 12L22 6" stroke="#38bdf8" stroke-width="0.8" stroke-linejoin="round" opacity="0.4"/>
+                <path d="M6 21L18 21" stroke="#38bdf8" stroke-width="0.8" stroke-linejoin="round" opacity="0.4"/>
             </svg>
-            引动智算
+            黑曜士 <span class="en">ONYX</span>
         </div>
     </header>
 
     <!-- 主视觉 -->
     <section class="hero">
-        <h1>终端矩阵 · 下载中心</h1>
-        <p>用数据驱动决策，用算力重构概率</p>
+        <h1>坚如黑曜<br>守御全局</h1>
+        <p>ONYX QUANT MATRIX DOWNLOAD</p>
+        <div class="line"></div>
     </section>
 
-    <!-- 软件导航列表 -->
+    <!-- 软件矩阵列表 -->
     <div class="container">
         
         <!-- 软件卡片 1 -->
         <div class="app-card">
             <div class="app-header">
-                <div class="app-icon">智</div>
-                <div class="app-name">引动智算 · 新澳智选库</div>
+                <!-- 图标 1：六边形数据矩阵 -->
+                <div class="app-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="28" height="28">
+                        <path d="M12 2L21 7V17L12 22L3 17V7L12 2Z"/>
+                        <circle cx="12" cy="12" r="3" fill="#38bdf8"/>
+                        <path d="M12 2V9M12 15V22M3 7L9 10.5M15 13.5L21 17M21 7L15 10.5M9 13.5L3 17"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="app-name">黑曜士 · 新澳数据库</div>
+                    <div class="app-sub">INTELLIGENCE CORE</div>
+                </div>
             </div>
-            <div class="app-desc">全新一代AI分析终端。涵盖十大算法交叉推演、极寒排雷防守、动态冷却池。配合大數據分析過去攪珠結果，務求提升中彩率，提供实时大底与深度复盘数据。</div>
+            <div class="app-desc">
+                搭载十大高维算法矩阵交叉验证，深度追踪冷热遗漏，內置云端完整历史数据源同步与全维分析矩阵；提供多套辅助决策工具与超长周期真实回测记录验证。系统坚守"客观中立、历史数据绝不篡改“底线。适配新手、数据采集极客与独立策略研究员。
+            </div>
             <div class="tags">
-                <span class="tag">AI推演</span>
-                <span class="tag">极寒风控</span>
-                <span class="tag">V13.8</span>
+                <span class="tag">AI 矩阵</span>
+                <span class="tag">趋势共振</span>
+                <span class="tag">多维过滤</span>
             </div>
-            <!-- 替换 href 里的链接为你软件的下载地址或TG机器人链接 -->
-            <a href="https://你的实际链接.com" target="_blank" class="btn-download">📥 免费下载 / 立即体验</a>
+            
+            <!-- 双端下载按钮组 -->
+            <div class="download-group">
+                <!-- 【替换这里】填入真实的 APK 下载链接 -->
+                <a href="https://你的安卓APK下载链接.apk" class="btn-dl android-btn">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="margin-bottom:-2px; margin-right:4px;">
+                        <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4483-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993.0001.5511-.4482.9997-.9993.9997zm-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997zm11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1521-.5676.416.416 0 00-.5676.1521l-2.0223 3.503C15.5902 8.2439 13.8533 7.85 12 7.85s-3.5902.3939-5.1367 1.0989L4.841 5.4467a.4161.4161 0 00-.5677-.1521.4157.4157 0 00-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.761h24c-.3435-4.1021-2.6892-7.5743-6.1185-9.4396z"/>
+                    </svg>
+                    安卓版下载
+                </a>
+                <!-- 【替换这里】填入真实的 PC 端下载链接 -->
+                <a href="https://你的电脑版下载链接.exe" class="btn-dl pc-btn">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="margin-bottom:-2px; margin-right:4px;">
+                        <path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7v2H8v2h8v-2h-2v-2h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/>
+                    </svg>
+                    电脑版下载
+                </a>
+            </div>
         </div>
 
         <!-- 软件卡片 2 -->
         <div class="app-card">
             <div class="app-header">
-                <div class="app-icon">狙</div>
-                <div class="app-name">引动智算· 极寒狙击</div>
+                <!-- 图标 2：雷达准星 -->
+                <div class="app-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="28" height="28">
+                        <circle cx="12" cy="12" r="8" stroke-dasharray="4 4"/>
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 2V7M12 17V22M2 12H7M17 12H22"/>
+                        <circle cx="12" cy="12" r="1" fill="#38bdf8"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="app-name">黑曜士 · 极寒杀码器</div>
+                    <div class="app-sub">RISK DEFENSE</div>
+                </div>
             </div>
-            <div class="app-desc">专为杀号打造的缩水端工具。深度智能优选追踪冷热遗漏指标，全自动多维度过滤执行杀肖、杀尾、杀半波等，剔除高危雷区。</div>
+            <div class="app-desc">
+                专为精准排雷打造的防守端核心。内置动态冷却防死循环机制，提供命中率回測。一键启动智能扫描数据分析自动执行杀肖、杀尾、杀半波，帮你剔除一切高危雷区，从而节约成本。
+            </div>
             <div class="tags">
-                <span class="tag">极限杀号</span>
-                <span class="tag">排雷雷达</span>
-                <span class="tag">即将上线</span>
+                <span class="tag">极寒剥离</span>
+                <span class="tag">动态防重</span>
+                <span class="tag">防守盾舱</span>
             </div>
-            <!-- 禁用状态按钮示例 -->
-            <a href="javascript:void(0);" class="btn-download btn-disabled">⏳ 即将开放下载</a>
+            
+            <div class="download-group">
+                <a href="https://你的安卓APK下载链接.apk" class="btn-dl android-btn">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="margin-bottom:-2px; margin-right:4px;">
+                        <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4483-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993.0001.5511-.4482.9997-.9993.9997zm-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997zm11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1521-.5676.416.416 0 00-.5676.1521l-2.0223 3.503C15.5902 8.2439 13.8533 7.85 12 7.85s-3.5902.3939-5.1367 1.0989L4.841 5.4467a.4161.4161 0 00-.5677-.1521.4157.4157 0 00-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.761h24c-.3435-4.1021-2.6892-7.5743-6.1185-9.4396z"/>
+                    </svg>
+                    安卓版下载
+                </a>
+                <a href="https://你的电脑版下载链接.exe" class="btn-dl pc-btn">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="margin-bottom:-2px; margin-right:4px;">
+                        <path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7v2H8v2h8v-2h-2v-2h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/>
+                    </svg>
+                    电脑版下载
+                </a>
+            </div>
         </div>
 
         <!-- 软件卡片 3 -->
         <div class="app-card">
             <div class="app-header">
-                <div class="app-icon">沙</div>
-                <div class="app-name">引动智算 挑码助手</div>
+                <!-- 图标 3：数据漏斗 -->
+                <div class="app-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="28" height="28">
+                        <path d="M3 4H21L14 12V20L10 22V12L3 4Z"/>
+                        <path d="M8 8H16M10 12H14"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="app-name">黑曜士 · 挑码助手</div>
+                    <div class="app-sub">CAPITAL SANDBOX</div>
+                </div>
             </div>
-            <div class="app-desc">通過六合彩號碼屬性，選出你要的號碼进行过滤和交集（即同時滿足所有選中屬性的號碼集合） 另外，你還可以對多組數據進行合併，相減，或者取交集。</div>
+            <div class="app-desc">
+                挑码助手”适用于六合彩（如新奥门六合彩、香港六合彩）的号码属性筛选、生肖/五行/波色统计缩水工具，提供生肖（鼠、牛等）、单双、大小、五行（金木水火土）、波色（红、蓝、绿波）等属性的集合与交集筛选，辅助彩民进行数据统计与分析。
+            </div>
             <div class="tags">
-                <span class="tag">资金规划</span>
-                <span class="tag">实战推演</span>
-                <span class="tag">开发中</span>
+                <span class="tag">多维度过滤</span>
+                <span class="tag">支持多属性</span>
+                <span class="tag">即将上线</span>
             </div>
-            <a href="javascript:void(0);" class="btn-download btn-disabled">⏳ 正在开发中</a>
+            
+            <!-- 未上线状态的按钮 -->
+            <div class="download-group">
+                <a href="javascript:void(0);" class="btn-dl btn-disabled">⏳ 核心研发中，敬请期待</a>
+            </div>
         </div>
+
     </div>
 
     <!-- 底部声明 -->
     <footer class="footer">
-        <p>© 2024 引动智算 QUANT INTELLIGENCE. 保留所有权利。</p>
-        <p style="margin-top: 10px; opacity: 0.5;">免责声明：本平台提供的所有数据及算法推演结果仅供参考，不构成任何实质性建议。</p>
+        <p>© 2024 黑曜士 ONYX QUANT DATA CENTER. All Rights Reserved.</p>
+        <p>免责声明：本平台提供的所有软件及算法推演结果仅供数据分析参考，不构成任何实质性建议。</p>
     </footer>
 
+    <!-- 设备识别与按钮高亮 JS -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // 检测是否为移动端设备
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if(isMobile) {
+                // 如果是手机打开，让安卓按钮呼吸闪烁
+                document.querySelectorAll('.android-btn').forEach(btn => {
+                    btn.classList.add('pulse-android');
+                });
+            } else {
+                // 如果是电脑打开，让电脑按钮呼吸闪烁
+                document.querySelectorAll('.pc-btn').forEach(btn => {
+                    btn.classList.add('pulse-pc');
+                });
+            }
+        });
+    </script>
 </body>
 </html>
